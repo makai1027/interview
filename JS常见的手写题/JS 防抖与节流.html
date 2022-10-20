@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JS 实现防抖节流</title>
+</head>
+<body>
+    <script>
+        /**
+         * 防抖：throttle，单位时间内只执行一次，多次执行只生效一次。
+         * 节流：debounce，单位时间后执行，单位时间内执行，倒计时会重新计算。
+        */
+        function debounce (fn, delay) {
+            let timer = null
+            return function () {
+                const args = [].slice.call(arguments)
+                const ctx = this
+                timer && clearTimeout(timer)
+                timer = setTimeout(() => {
+                    fn.apply(ctx, args)
+                }, delay)
+            }
+        }
+
+
+        function throttle(fn, delay) {
+            let last = null
+            let timer = null
+            return function() {
+                const args = [].slice.call(arguments)
+                const now = +new Date()
+                const ctx = this
+                if (last && last + delay > now) {
+                    timer && clearTimeout(timer)
+                    timer = setTimeout(() => {
+                        last = now
+                        fn.apply(ctx, args)
+                    }, delay)
+                } else {
+                    last = now
+                    fn.apply(ctx, args)
+                }
+            }
+        }
+    </script>
+</body>
+</html>

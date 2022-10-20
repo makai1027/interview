@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JS 排序算法</title>
+</head>
+<body>
+    <script>
+        const array = [9,8,2,12,23,4,23,5,6,74,5]
+        /**
+         * 冒泡排序， 首先将1、2进行对比交换，前边大于后边则进行交换，否则不交换。依次向后对比，交换两个数。
+        */
+        function bubbleSort(array) {
+            for (let i = 0; i < array.length; i++) {
+                const ele = array[i]
+                for (let j = 0; j < array.length - 1; j++) {
+                    const item = array[j];
+                    if (item > array[j + 1]) {
+                        [array[j], array[j + 1]] = [array[j + 1], array[j]]
+                    }
+                }
+            }
+            return array
+        }
+
+        /**
+         * 选择排序
+         * 1. 每次从待排序的元素中挑选一个最大或者最小的，存放在起始位置
+         * 2. 再从后边的元素中找到最大或者最小的，存放在次位
+         * 3. 直到所有的元素遍历完成
+        */
+        function selectSort(array) {
+            let len = array.length 
+            let minIndex = null
+            for (let i = 0; i < len - 1; i++) {
+                const ele = array[i];
+                minIndex = i
+                for (let j = i + 1; j < array.length; j++) {
+                    const item = array[j];
+                    if (array[j] < array[minIndex]) {
+                        minIndex = j
+                    }
+                }
+                [array[minIndex], array[i]] = [array[i], array[minIndex]] 
+            }
+            return array
+        }
+
+        /**
+         * 快排序
+         * 1. 数组从中间隔开，去中间索引作为中间数，以中间数为基准将数组分开
+         * 2. 分为大于中间数的left数组 和 小于中间数的right数组
+         * 3. 两端的left right数组进行递归对比
+        */
+        function fastSort(array) {
+            if (!array || array.length <= 1) return array
+            const mIndex = Math.floor(array.length / 2)
+            const left = []
+            const right = []
+            const mId = array.splice(mIndex, 1)[0]
+            for (let i = 0; i < array.length; i++) {
+                const el = array[i];
+                if (el >= mId)  {
+                    left.push(el)
+                } else {
+                    right.push(el)
+                }
+            }
+            return fastSort(right).concat([mId], fastSort(left))
+        }
+
+        
+        console.log(fastSort(array), 'fastSort')
+    </script>
+</body>
+</html>

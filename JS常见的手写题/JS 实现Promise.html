@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JS 实现Promise</title>
+</head>
+
+<body>
+    <script>
+        const pending = 'PENDING'
+        const fulfield = 'FULFIELD'
+        const rejected = 'REJECTED'
+
+        function _Promise(exector) {
+            this.status = pending
+            this.value = null
+            this.fulfieldCallbacks = []
+            this.rejectedCallbacks = []
+
+            const resolve = (value) => {
+                if (this.status === pending) {
+                    this.status = fulfield
+                    this.value = value
+                    this.fulfieldCallbacks.forEach((fn) => fn())
+                }
+            }
+
+            const reject = (error) => {
+                if(this.status === pending) {
+                    this.status = rejected
+                    this.value = error
+                    this.rejectedCallbacks.forEach((fn) => fn())
+                }
+            }
+
+            try {
+                exector(resolve, reject)
+            } catch (error) {
+                reject(error)
+            }
+        }
+
+        _Promise.prototype.then = function (resolveFn, rejecteFn) {
+            resolveFn = typeof resolveFn === 'function' ? resolveFn : (v) => v
+            rejecteFn = typeof rejecteFn === 'function' ? rejecteFn : (v) => v
+
+            if (this.status === pending) {
+                this.fulfieldCallbacks.push(() => resolveFn(this.value))
+                this.rejectedCallbacks.push(() => rejecteFn(this.value))
+            }
+
+            if (this.status === fulfield) {
+                resolveFn(this.value)
+            }
+
+            if (this.status === rejected) {
+                rejecteFn(this.value)
+            }
+            // 主要是为了保证能够then调用then，将自身导出
+            return this
+        }
+
+        _Promise.prototype.catch = function (rejectFn) {
+            rejectFn = typeof rejectFn === 'function' ? rejectFn : (v) => v
+            if (this.status === pending) {
+                this.rejectedCallbacks.push(() => rejectFn(this.value))
+            }
+            if (this.status === rejected) {
+                rejectFn(this.value)
+            }
+        }
+
+        const p = new _Promise((resolve, reject) => {
+            const bol = Math.random() > 0.5
+            console.log(bol)
+            if (bol) {
+                setTimeout(() => {
+                    resolve('正确')
+                }, 500)
+            } else {
+                reject('错误')
+            }
+        })
+
+        p.then((res) => {
+            console.log(`正确返回的信息：${res}`)
+        }).catch((error) => {
+            console.warn(`错误返回的信息：${error}`)
+        })
+    </script>
+</body>
+
+</html>

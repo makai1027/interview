@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JS 继承方式</title>
+</head>
+<body>
+    <script>
+        /**
+         * JS 继承方式有哪些？
+         * 1. 原型链继承
+         * 2. 构造函数继承
+         * 3. 组合式继承
+         * 4. 原型式继承
+         * 5. 寄生式继承
+         * 6. 寄生组合式继承
+         * 
+        */
+
+        /**
+         * 原型链继承
+         * 缺点：无法向构造函数传值，引用类型数据共享
+        */
+
+        function Person1() {
+            this.friends = ['小欧','小李']
+        }
+        Person1.prototype.say = function () {
+            console.log(this.friends)
+        }
+        function Student1 () {}
+        Student1.prototype = new Person1()
+
+        const child1 = new Student1()
+        child1.say() // 小欧，小李
+        child1.friends.push('第三者')
+        const child2 = new Student1()
+        child2.say() // 小欧小李第三者
+
+
+        /**
+         * 借用构造函数继承
+         * 缺点：构造函数实例方法无法复用
+         * 优点：能够向构造函数传值，避免因类型数据共享
+        */
+
+        function Person2(name) {
+            this.friends = ['this.friends'].concat(name)
+            this.say = function () {
+                console.log(this.friends)
+            }
+        }
+
+        function Student2(name) {
+            Person2.call(this, name)
+        }
+        const child3 = new Student2('小萝莉')
+        child3.say()
+        const child4 = new Student2('小萝莉2')
+        child4.say()
+
+
+        /**
+         * 原型式继承
+         * 缺点：所有的属性及方法都是从父对象赋值过来的，无法实现复用
+        */
+
+        function create(obj) {
+            let newobj = function (){}
+            newobj.prototype = obj
+            return new newobj()
+        }
+
+        const obj = {
+            name: '你好',
+            age: 123,
+            say: function() {
+                console.log(this.name, this.age)
+            }
+        }
+
+        const obj2 = create(obj)
+        obj2.say()
+
+
+        /**
+         * 寄生式继承
+        */
+
+        function createobj(obj) {
+            let clone = create(obj)
+            clone.firends = []
+            clone.add = function (name) {
+                this.friends.push(name)
+            }
+        }
+
+
+        /**
+         * 寄生组合式继承
+        */
+
+        function Person3(name, age) {
+            this.name = name
+            this.age = age
+        }
+        Person3.prototype.say = function () {
+            console.log(this.name, this.age)
+        }
+
+        function Student3(name, age) {
+            Person3.call(this, name, age)
+            this.friends = ['小明']
+        }
+
+        function mergePrototype(child, person) {
+            child.prototype = create(person.prototype)
+            child.prototype.constructor = child
+        }
+        mergePrototype(Student3, Person3)
+
+        const child5 = new Student3('小欧', 12)
+        child5.say()
+    </script>
+</body>
+</html>

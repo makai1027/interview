@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JS 数组和树结构之间的相互转换</title>
+</head>
+<body>
+    <script>
+        const demoList = (() => {
+            const result = [
+                {
+                    id: 1,
+                    parentId: 0,
+                    name: '文件1'
+                },
+                {
+                    id: 2,
+                    parentId: 0,
+                    name: '文件2'
+                },
+                {
+                    id: 3,
+                    parentId: 0,
+                    name: '文件3'
+                },
+                {
+                    id: 4,
+                    parentId: 0,
+                    name: '文件4'
+                },
+                {
+                    id: 5,
+                    parentId: 0,
+                    name: '文件5'
+                },
+                {
+                    id: 6,
+                    parentId: 0,
+                    name: '文件6'
+                },
+                {
+                    id: 7,
+                    parentId: 0,
+                    name: '文件7'
+                }
+            ]
+            function Random(min, max) {
+                return Math.round(Math.random() * (max - min)) + min
+            }
+            for (let index = 8; index < 1000; index++) {
+                const parentId = Random(1, 7)
+                result.push({
+                    id: index,
+                    name: `文件${parentId}-${index}`,
+                    parentId
+                })
+            }
+            return result
+        })()
+
+        function transformToTree(data) {
+            const map = new Map(data.map((el) => [el.id, el]))
+            let virtual = {}
+            data.forEach((node) => {
+                const parent = map.get(node.parentId) || virtual
+                parent.children = parent.children || []
+                parent.children.push(node)
+            })
+
+            return virtual.children || []
+        }
+
+        function tranformToArray(data) {
+            if (!data || !data.length) return []
+            const list = []
+            const stack = data
+            while(stack.length) {
+                const item = stack.shift()
+                list.push(item)
+                if (item.children && item.children.length) {
+                    stack.push(...item.children)
+                }
+            }
+            return list
+        }
+
+        // const data = transformToTree(demoList)
+        // const data2 = tranformToArray(data)
+        // console.log(data, data2)
+    </script>
+</body>
+</html>

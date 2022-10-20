@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JS 手写实现New</title>
+</head>
+<body>
+    <script>
+        /**
+         * new 的实现原理
+         * 1. 新建一个空对象
+         * 2. 将空对象的原型链指向constructor的原型对象
+         * 3. 使用构造函数将constructor的属性继承到空对象上，并声明其返回结果
+         * 4. 判断是否有返回结果，没有则返回新对象
+        */
+        function _new(constructor, ...args) {
+            let clone = {}
+            clone.__proto__ = constructor.prototype
+            const result = constructor.call(clone, ...args)
+            return result instanceof Object ? result : clone
+        }
+
+        // 测试, 应该返回长度为7的空数组
+        console.log(_new(Array, 7))
+    </script>
+</body>
+</html>

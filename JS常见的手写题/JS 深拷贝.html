@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JS 手写递归实现深拷贝</title>
+</head>
+<body>
+    <script>
+        function Clone(target) {
+            if (!target || typeof target !== 'object') return target
+            const result = target instanceof Array ? [] : {}
+            for (const key in target) {
+                if (Object.hasOwnProperty.call(target, key)) {
+                    result[key] = Clone(target[key])
+                }
+            }
+            return result
+        }
+
+        // 无法解决循环引用
+
+        let obj1 = {
+            name: 122,
+            string: '111'
+        }
+        let obj2 = Clone(obj1)
+
+        console.log(Object.is(obj1, obj2))
+    </script>
+</body>
+</html>

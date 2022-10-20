@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JS 实现数组扁平化</title>
+</head>
+<body>
+    <script>
+        function flat(array) {
+            const result = []
+            for (let i = 0; i < array.length; i++) {
+                const ele = array[i];
+                if (!Array.isArray(ele)) {
+                    result.push(ele)
+                } else {
+                    result.push(...flat(ele))
+                }
+            }
+            return result
+        }
+
+        const arr = [1,[2, [3, [4]], [5, 6]]]
+
+        function flat2(array) {
+            return array.toString().split(',').map(el => +el)
+        }
+
+        function flat3(array) {
+            return array.reduce((pre, next) => {
+                return pre.concat(Array.isArray(next) ? flat3(next) : next)
+            }, [])
+
+        }
+
+        function flat4(array) {
+            while(array.some(el => Array.isArray(el))) {
+                array = [].concat.apply([], array)
+            }
+            return array
+        }
+        console.log(flat4(arr))
+    </script>
+</body>
+</html>

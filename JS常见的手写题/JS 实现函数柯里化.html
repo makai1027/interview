@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JS 实现函数柯里化</title>
+</head>
+<body>
+    <script>
+        /**
+         * 柯里化是高阶函数以及闭包的一种使用方式，主要是将多个参数转换为一元参数进行调用
+        */
+    //  不固定参数数量，但是结束时必须传入空参数  
+       function add() {
+        const args = [].slice.call(arguments)
+        return function () {
+            const ctx = this
+            const _args = [].slice.call(arguments)
+            const all = args.concat(_args)
+            if (!_args || !_args.length) {
+                return all.reduce((a,b) => a+b)
+            } else {
+                return add.apply(ctx, all)
+            }
+        }
+       }
+
+       // 固定参数数量，主要是利用的es6的function的length指的是未赋值的默认参数数量
+       function curry(a,b,c) {
+        return a+b+c
+       }
+       function add1(fn) {
+        const args = [].slice.call(arguments, 1)
+        return function() {
+            const ctx = this
+            const _args = [].slice.call(arguments)
+            const all = args.concat(_args)
+            if (all.length >= fn.length) {
+                return fn(...all)
+            } else {
+                return add1.apply(ctx,  [fn, ...all])
+            }
+        }
+       }
+
+
+       // 第三种不固定参数数量，但是直接执行返回函数
+       function add3(...args) {
+        const sum = args.slice().reduce((a,b) => a+b)
+        const _curry = (..._args) => add3.apply(null, [sum, ..._args])
+        _curry.toString = () => sum.toString()
+        _curry.valueOf = () => sum
+        return _curry
+       }
+
+       /**
+        * 测试
+       */
+
+       console.log(add(1,2)(3)(4)())
+       console.log(add1(curry, 1)(2)(3))
+       console.log(add3(1,2)(3)(4).toString(), add3(1,2)(3)(4).valueOf())
+    </script>
+</body>
+</html>
