@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JS 实现异步并发器</title>
+</head>
+<body>
+    <script>
+        class Scheduler {
+            constructor(max) {
+                this.max = max
+                this.task = 0
+                this.quene = []
+            }
+            async addTask(promiseExec) {
+                /**
+                 * 如果队列任务数task 大于等于 max，需要进行阻塞，将resolve 添加到等待队列里，等待唤醒
+                 * 等task小于max则，将任务从队列中取出resolve，await进行执行，本次add操作继续
+                */
+                if (this.task >= this.max) await new Promise((resolve) => this.quene.push(resolve))
+
+                this.task++
+                let res = null
+                try {
+                    res = await promiseExec()
+                    this.task--
+                    // 如果队列中存在待执行的任务
+                    if (this.quene.length) {
+                        // 从队列头部取出一个任务
+                        const exec = this.quene.shift()
+                        // 执行任务
+                        exec()
+                    }
+                } catch (error) {
+                    console.error(error)
+                }
+                return res
+            }
+        }
+        // 构建一个新的调度器，并发数为2
+        const scheduler = new Scheduler(2)
+
+        const timer = time => new Promise((resolve) => {
+            setTimeout(() => {
+                resolve()
+            }, time)
+        })
+
+        const addTask = (time, order) => {
+            // scheduler.addTask 返回一个promise，也需要导入一个promise
+            scheduler.addTask(() => timer(time).then(() => console.log(order)))
+        }
+
+        addTask(1000, '1')
+        addTask(300, '2')
+        addTask(500, '3')
+        addTask(800, '4')
+        
+    </script>
+</body>
+</html>

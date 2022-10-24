@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JS 二叉树的遍历</title>
+</head>
+<body>
+    <script>
+        const root = {
+            value: 'root-1',
+            left: {
+                value: 'l-1',
+                left: {
+                    value: 'l-1-1',
+                    left: {
+                        value: 'l-1-1-1',
+                        left: null,
+                        right: null
+                    },
+                    right: {
+                        value: 'l-1-1-2',
+                        left: null,
+                        right: null
+                    }
+                },
+                right: {
+                    value: 'l-1-2',
+                    left: {
+                        value: 'l-1-2-1',
+                        left: null,
+                        right: null
+                    },
+                    right: {
+                        value: 'l-1-2-2',
+                        left: null,
+                        right: null
+                    }
+                }
+            },
+            right: {
+                value: 'l-2',
+                left: {
+                    value: 'l-2-1',
+                    left: {
+                        value: 'l-2-1-1',
+                        left: null,
+                        right: null
+                    },
+                    right: {
+                        value: 'l-2-1-2',
+                        left: null,
+                        right: null
+                    }
+                },
+                right: {
+                    value: 'l-2-2',
+                    left: {
+                        value: 'l-2-2-1',
+                        left: null,
+                        right: null
+                    },
+                    right: {
+                        value: 'l-2-2-2',
+                        left: null,
+                        right: null
+                    }
+                }
+            }
+        }
+
+        /**
+         * 二叉树遍历分为前序遍历、中序遍历(左中右)、后序遍历（左右中）
+         * 前序遍历：1. 先访问根节点
+         * 2. 先对当前节点的左节点进行前序遍历，如果有子节点，则继续进行前序遍历
+         * 3. 对右节点进行前序遍历，如果有子节点，则继续进行前序遍历
+        */
+
+        function preorder() {}
+    </script>
+</body>
+</html>
