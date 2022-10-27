@@ -77,7 +77,73 @@
          * 3. 对右节点进行前序遍历，如果有子节点，则继续进行前序遍历
         */
 
-        function preorder() {}
+        function preorder(root) {
+            if (!root) return
+            console.log(root.value)
+            preorder(root.left)
+            preorder(root.right)
+        }
+
+        // 非递归版本，先root， 后left 在right，主要是pop尾部截取，执行栈内先插入right  在插入left，保证先left  后  right的顺序
+        function preorder2(root) {
+            if (!root) return 
+            const stack = [root]
+            while(stack.length) {
+                const item = stack.pop()
+                console.log(item.value)
+                if (item.right) {
+                    stack.push(item.right)
+                }
+                if (item.left) {
+                    stack.push(item.left)
+                }
+            }
+        }
+        // preorder(root)
+
+        /**
+         * 中序遍历
+         * 原理：先访问left节点，如果有子节点继续中序遍历，在访问根节点，最后访问right节点，如果存在子节点则继续中序遍历
+        */
+        function inorder(root) {
+            if (!root) return
+            inorder(root.left)
+            console.log(root.value)
+            inorder(root.right)
+        }
+
+        function inorder2(root) {
+            if (!root) return
+            const stack = [] 
+            let p = root
+            while(p || stack.length) {
+                while(p) {
+                    stack.push(p)
+                    p = p.left
+                }
+                const n = stack.pop()
+                console.log(n.value)
+                p = n.right
+            }
+        }
+        // inorder2(root)
+
+        /**
+         * 后序遍历
+         * 先遍历left，如果有子节点则继续后序遍历，再遍历right节点，如果有子节点，则继续中序遍历，最后访问root
+        */
+
+        function nextorder(root) {
+            if (!root) return 
+            nextorder(root.left)
+            nextorder(root.right)
+            console.log(root.value)
+        }
+        // 非递归版本
+        function nextorder2(root) {
+            if (!root) return
+            
+        }
     </script>
 </body>
 </html>
