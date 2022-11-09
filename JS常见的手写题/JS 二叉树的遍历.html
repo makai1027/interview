@@ -142,8 +142,28 @@
         // 非递归版本
         function nextorder2(root) {
             if (!root) return
-            
+            const stack = [root]
+            let outStack = []
+            while(stack.length) {
+                const n = stack.pop()
+                outStack.push(n)
+                /**
+                 * 1. 首先outStack放入的是root
+                 * 2. 然后再放入left right
+                 * 3. 由于stack是pop尾部删除，所以每次先取出来的一定是right
+                 * 4. 那么在outStack的顺序就是root -> right -> left
+                 * 5. 那么outStack通过pop尾部取出就是 left -> right -> root的顺序
+                */
+                if (n.left) stack.push(n.left)
+                if (n.right) stack.push(n.right)
+            }
+            while(outStack.length) {
+                const n = outStack.pop()
+                console.log(n.value)
+            }
         }
+
+        nextorder2(root)
     </script>
 </body>
 </html>
