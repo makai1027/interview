@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+
+</body>
+<script>
+
+    const root = {
+        value: 0,
+        left: {
+            value: 1,
+            left: {
+                value: 3,
+                left: {
+                    value: 6,
+                    left: {
+                        value: -14
+                    },
+                    right: {
+                        value: -15
+                    }
+                },
+                right: {
+                    value: 7,
+                    left: null,
+                    right: null
+                }
+            },
+            right: {
+                value: 4,
+                left: {
+                    value: 8,
+                    left: {
+                        value: 16
+                    },
+                    right: {
+                        value: -17
+                    }
+                },
+                right: {
+                    value: 9,
+                    left: null,
+                    right: null
+                }
+            }
+        },
+        right: {
+            value: 2,
+            left: {
+                value: 4,
+                left: {
+                    value: 10,
+                    left: null,
+                    right: null
+                },
+                right: {
+                    value: 11,
+                    left: null,
+                    right: null
+                }
+            },
+            right: {
+                value: 5,
+                left: {
+                    value: 12,
+                    left: null,
+                    right: null
+                },
+                right: {
+                    value: 13,
+                    left: null,
+                    right: null
+                }
+            }
+        }
+    }
+    /**
+     * 获取二叉树所有路径
+    */
+    function binaryPath(root) {
+        const paths = []
+        if (!root) return paths
+        function dfs(n, path) {
+            path += n.value + ' -> '
+            if (!n.left && !n.right) {
+                paths.push(path)
+            }
+
+            if (n.left) dfs(n.left, path)
+            if (n.right) dfs(n.right, path)
+        }
+
+        dfs(root, '')
+        console.log(paths)
+        return paths
+    }
+
+    // 路径遍历测试
+    // binaryPath(root)
+
+
+    /**
+     * 获取二叉树的最大路径和
+    */
+    function maxPathSum(root) {
+        if (!root) return 0
+        let result = Number.MIN_SAFE_INTEGER
+
+        function dfs(n) {
+            if (!n) return 0
+            const maxLeftSum = Math.max(dfs(n.left), 0)
+            const maxRightSum = Math.max(dfs(n.right), 0)
+            const newPathSum = n.value + maxRightSum + maxLeftSum
+
+            result = Math.max(maxLeftSum, newPathSum)
+            return n.value + Math.max(maxRightSum, maxLeftSum)
+        }
+
+        dfs(root)
+
+        console.log(result)
+    }
+
+    // maxPathSum(root)
+
+
+    /**
+     * 获取二叉树最小值
+    */
+    function minPathSum(root) {
+        if (!root) return 0
+        let result = Number.MIN_SAFE_INTEGER
+
+        function dfs(n) {
+            if (!n) return 0
+            const minLeftSum = Math.min(dfs(n.left), 0)
+            const minRightSum = Math.min(dfs(n.right), 0)
+            const newPathSum = n.value + minRightSum + minLeftSum
+
+            result = Math.min(minLeftSum, newPathSum)
+            return n.value + Math.min(minRightSum, minLeftSum)
+        }
+
+        dfs(root)
+
+        console.log(result)
+    }
+
+    // minPathSum(root)
+
+
+    /**
+     * 获取最小节点
+    */
+    function maxNode(root) {
+        if (!root) return 0
+
+        let max = Number.MIN_SAFE_INTEGER
+
+        function dfs(n) {
+            if (!n) return 0
+            const maxLeft = Math.max(dfs(n.left), n.value)
+            const maxRight = Math.max(dfs(n.right), n.value)
+            max = Math.max(maxLeft, maxRight)
+            return Math.max(maxLeft, maxRight)
+        }
+
+        dfs(root)
+        console.log(max, '--')
+    }
+    // maxNode(root)
+
+    // 获取最小的节点
+    function minNode(root) {
+        if (!root) return 0
+
+        let min = Number.MIN_SAFE_INTEGER
+
+        function dfs(n) {
+            if (!n) return 0
+            const minLeft = Math.min(dfs(n.left), n.value)
+            const minRight = Math.min(dfs(n.right), n.value)
+            min = Math.min(minLeft, minRight)
+            return Math.min(minLeft, minRight)
+        }
+
+        dfs(root)
+        console.log(min, '--')
+    }
+    // minNode(root)
+
+
+    /**
+     * 二叉树的查询并返回路径
+    */
+
+    function searchNode(root, value) {
+        let paths = ''
+        if (!root) return paths
+        function dfs(n, path) {
+            path += n.value + ' -> '
+            if (n.value === value) {
+                paths = path
+                return
+            }
+            if (!n.left && !n.right) return
+            if (n.left) dfs(n.left, path)
+            if (n.right) dfs(n.right, path)
+        }
+
+        dfs(root, '')
+
+        console.log(paths, '/////')
+    }
+    searchNode(root, -17)
+</script>
+
+</html>

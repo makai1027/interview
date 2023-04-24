@@ -1,0 +1,20 @@
+{
+  "editor.formatOnSave": true,
+  "files.autoSave": "onWindowChange",
+  "editor.tabSize": 2,
+  "editor.codeActionsOnSave": {
+    "source.fixAll": true
+  },
+  "eslint.format.enable": true,
+  "eslint.options": {
+    "extendsions": [".js", ".jsx", ".ts", ".tsx", ".vue", "html"]
+  },
+  "eslint.validate": ["vue", "javascript", "typescript", "typescriptreact"],
+  "eslint.codeAction.showDocumentation": {
+    "enable": true
+  },
+
+  "[typescript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  }
+}

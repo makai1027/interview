@@ -163,7 +163,37 @@
             }
         }
 
-        nextorder2(root)
+        // nextorder2(root)
+
+        /**
+         * 层序遍历，
+         * 按照二叉树结构一层层打印, 先左后右
+         * 有点类似深度优先算法
+        */
+
+        function deepOrder(root) {
+            if (!root) return
+            const stack = [root]
+            const res = []
+
+            while (stack.length) {
+                const len = stack.length
+                const child = []
+                for (let i = 0; i < len; i++) {
+                    // 因为先push left  再push right，所以取的时候需要反续
+                    const n = stack.shift()
+                    child.push(n.value)
+                    if (n.left) stack.push(n.left)
+                    if (n.right) stack.push(n.right)
+                }
+                res.push(child)
+            }
+
+            console.log(res)
+        }
+
+        // 层序遍历测试
+        // deepOrder(root)
     </script>
 </body>
 </html>
