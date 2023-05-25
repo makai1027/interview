@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JS 实现eventBus</title>
+</head>
+
+<body>
+
+</body>
+<script>
+  /**
+   * 针对eventBus我的理解是，eventBus是一个可以被new的类，可以是一个class，function、vue
+   * 以下以function、class为例
+   * 总体大差不差，包含事件监听、事件触发、事件清除
+  */
+
+  function mitt1() {
+    const bus = new Map()
+
+    function on(name, evt) {
+      const target = bus.get(name)
+
+      if (target) {
+        target.push(evt)
+      } else {
+        bus.set(name, [evt])
+      }
+    }
+
+    function emit(name, params) {
+      const target = bus.get(name)
+      if (target) {
+        target.slice().forEach((fn) => {
+          fn(params)
+        })
+      }
+    }
+
+    function off(name, evt) {
+      if (!evt) {
+        bus.set(name, [])
+      } else {
+        const target = bus.get(name)
+        const idx = target.findIndex(fn => fn === evt)
+        target.splice(idx, 1)
+      }
+    }
+
+    function clear() {
+      bus.clear()
+    }
+
+    return {
+      on,
+      emit,
+      off,
+      clear
+    }
+  }
+
+
+  class mitt2 {
+    constructor() {
+      this.bus = new Map()
+    }
+
+    on(name, evt) {
+      const target = this.bus.get(name)
+      if (target) {
+        target.push(evt)
+      } else {
+        this.bus.set(name, evt)
+      }
+    }
+
+    emit(name, params) {
+      const target = this.bus.get(name)
+      if (target) {
+        target.slice().forEach((fn) => {
+          fn(params)
+        })
+      }
+    }
+
+    off(name, evt) {
+      if (!evt) {
+        this.bus.set(name, [])
+      } else {
+        const target = this.bus.get(name)
+        const index = target.findIndex(fn => fn === evt)
+        target.splice(index, 1)
+      }
+    }
+
+    clear() {
+      this.bus.clear()
+    }
+  }
+
+
+</script>
+
+</html>
