@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <title>假设有n阶楼梯，每次爬一阶或者两阶，请问有多少种不同的方法爬到楼顶？</title>
+
+</body>
+<script>
+  function tpSteps(n) {
+    let first = 1
+    let second = 1
+    let ret = 1
+    for (let i = 2; i <= n; i++) {
+      second = ret + first
+      ret = first
+      first = second
+    }
+    return second
+  }
+
+  console.log(tpSteps(40))
+</script>
+
+</html>
