@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+
+    function forbin(n) {
+      let s = 1
+      let e = 1;
+      let sum = e
+      let result = [1, 1]
+      for (let i = 2; i < n; i++) {
+        sum = s + e
+        result.push(sum)
+        s = e
+        e = sum
+      }
+      console.log(result)
+      return sum
+    }
+
+    // console.log(forbin(10))
+    // 递归
+    function forbin2(n, s = 1, e = 1) {
+      if (n <= 2) return e
+      return forbin2(n - 1, e, s + e)
+    }
+    console.log(forbin2(5))
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    function _Promise(exec) {
+      this.value = null
+      this.status = 'pending'
+      this.resolveCallbacks = []
+      this.rejectCallbacks = []
+      const ctx = this
+      function resolve(value) {
+        if (ctx.status === 'pending') {
+          ctx.status = 'fulfiled'
+          ctx.value = value
+          ctx.resolveCallbacks.forEach(fn => fn())
+        }
+      }
+
+      function reject(error) {
+        if (ctx.status === 'pending') {
+          ctx.status = 'rejected'
+          ctx.value = error
+          ctx.rejectCallbacks.forEach(fn => fn())
+        }
+      }
+      try {
+        exec(resolve, reject)
+      } catch (error) {
+        reject(error)
+      }
+    }
+
+    _Promise.prototype.then = function (resolve, reject) {
+      resolve = typeof resolve === 'function' ? resolve : v => v
+      reject = typeof reject === 'function' ? reject : v => v
+
+      if (this.status === 'pending') {
+        this.resolveCallbacks.push(() => resolve(this.value))
+        this.rejectCallbacks.push(() => reject(this.value))
+      }
+
+      if (this.status === 'fulfiled') {
+        resolve(this.value)
+      }
+
+      if (this.status === 'rejected') {
+        reject(this.value)
+      }
+
+      return this
+    }
+
+    _Promise.prototype.catch = function (reject) {
+      reject = typeof reject === "function" ? reject : (v) => v
+      if (this.status === 'pending') {
+        this.rejectCallbacks.push(() => reject(this.value))
+      }
+
+      if (this.status === 'rejected') {
+        reject(this.value)
+      }
+      return this
+    }
+
+    _Promise.prototype.finally = function (finallyFn) {
+      return this.then(() => {
+        this.resolveCallbacks.push(() => finallyFn(this.value))
+      }, () => {
+        this.rejectCallbacks.push(() => finallyFn(this.value))
+      })
+    }
+
+    const p = () => new _Promise((resolve, reject) => {
+      const bol = Math.random() > 0.5
+      if (bol) {
+        setTimeout(() => {
+          resolve('正确')
+        }, 500)
+      } else {
+        reject('错误')
+      }
+    })
+    console.log(p())
+
+    p().then((res) => {
+      console.log(`正确返回的信息：${res}`)
+    }).then((res) => {
+      console.log(`正确返回的信息22222：${res}`)
+    }, (error) => {
+      console.log(`错误返回的信息1111：${error}`)
+    }).catch((error) => {
+      console.log(`错误返回的信息22222：${error}`)
+    }).finally((res) => {
+      console.log('finally', res)
+    }).finally((res) => {
+      console.log('finally22222', res)
+    })
+  </script>
+</body>
+
+</html>

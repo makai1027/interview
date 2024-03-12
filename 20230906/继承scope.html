@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    function create(target) {
+      function F() { }
+      F.prototype = target
+      return new F()
+    }
+
+    function mergePrototype(child, parent) {
+      child.prototype = create(parent.prototype)
+      child.constructor = child
+    }
+
+    function Person(hobbys) {
+      this.hobbys = hobbys
+    }
+
+    Person.prototype.say = function () {
+      console.log(this.hobbys)
+    }
+
+    function Student(hobbys) {
+      Person.call(this, hobbys)
+    }
+
+    mergePrototype(Student, Person)
+
+    const child = new Student(['足球', '篮球'])
+
+    // child.say()
+
+    console.log(Student.__proto__)
+    console.log(Student.prototype)
+    console.log(child.__proto__)
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    function add() {
+      const fn = this
+      const args = [].slice.call(arguments)
+      return function () {
+        const _args = [].slice.call(arguments)
+
+        if (!_args.length) {
+          return args
+        } else {
+          return add.apply(fn, args.concat(_args))
+        }
+      }
+    }
+
+
+    function _add(...args) {
+      const sum = args.reduce((a, b) => a + b)
+      const curry = (...args2) => _add.apply(null, [sum, ...args2])
+      curry.valueOf = () => Number(sum)
+      curry.toString = () => sum + ''
+      return curry
+
+    }
+  </script>
+</body>
+
+</html>

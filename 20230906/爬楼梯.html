@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <title>
+    有n节楼梯，每次只能走1层或者2层，有多少种走法？
+  </title>
+  <script>
+    function step(n, allSteps = 0) {
+      if (n === allSteps) return 1
+      if (n < allSteps) return 0
+      return step(n, allSteps + 1) + step(n, allSteps + 2) + step(n, allSteps + 3)
+    }
+    console.log(step(10))
+
+    function step2(n) {
+      if (n === 1) return 1
+      if (n === 2) return 2
+      if (n === 3) return 4
+      return step2(n - 1) + step2(n - 2) + step(n - 3)
+    }
+    console.log(step2(10))
+  </script>
+</body>
+
+</html>

@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>JS 实现异步并发器</title>
 </head>
+
 <body>
     <script>
         class Scheduler {
@@ -25,6 +27,10 @@
                 let res = null
                 try {
                     res = await promiseExec()
+                } catch (error) {
+                    console.error(error)
+                } finally {
+
                     this.task--
                     // 如果队列中存在待执行的任务
                     if (this.quene.length) {
@@ -33,18 +39,21 @@
                         // 执行任务
                         exec()
                     }
-                } catch (error) {
-                    console.error(error)
                 }
                 return res
             }
         }
         // 构建一个新的调度器，并发数为2
-        const scheduler = new Scheduler(2)
+        const scheduler = new Scheduler(1)
 
-        const timer = time => new Promise((resolve) => {
+        const timer = time => new Promise((resolve, reject) => {
             setTimeout(() => {
-                resolve()
+                const random = Math.random()
+                if (random > 0.5) {
+                    resolve(true)
+                } else {
+                    reject(false)
+                }
             }, time)
         })
 
@@ -54,10 +63,11 @@
         }
 
         addTask(1000, '1')
-        addTask(300, '2')
-        addTask(500, '3')
-        addTask(800, '4')
-        
+        addTask(1000, '2')
+        addTask(2000, '3')
+        addTask(2000, '4')
+
     </script>
 </body>
+
 </html>

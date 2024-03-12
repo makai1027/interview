@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    const slice = Array.prototype.slice.call
+    Function.prototype._apply = function (ctx) {
+      ctx = ctx || window
+      // 取到第二个参数，这个参数一定是数组
+      const args = slice(arguments, 1)
+      ctx.fn = this
+      let result
+      if (args && Array.isArray(args)) {
+        result = ctx.fn(...args[0])
+      } else {
+        result = ctx.fn()
+      }
+      delete ctx.fn
+      return result
+    }
+
+
+    Function.prototype._call = function (ctx) {
+      ctx = ctx || window
+      // 获取剩余参数
+      const args = slice(arguments, 1)
+      ctx.fn = this
+      const result = ctx.fn(...args)
+      delete ctx.fn
+      return result
+    }
+
+    Function.prototype._bind = function (ctx) {
+      if (typeof this !== 'function') {
+        throw new Error('必须是一个函数')
+      }
+      ctx = ctx || window
+      const fn = this
+      const args = slice(arguments, 1)
+
+      const f = function () {
+        const _args = slice(arguments)
+        const allArgs = args.concat(_args)
+        // 如果this是f的实例，那么说明bind返回的方法被实例化了，所以返回f、，否则返回绑定的作用域ctx
+        return fn.apply(this instanceof f ? this : ctx, allArgs)
+      }
+      // 这一步必须将f的原型对象，指向fn的原型
+      f.prototype = fn.prototype
+      return f
+    }
+  </script>
+</body>
+
+</html>

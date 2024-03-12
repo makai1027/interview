@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    const arr = [1, 2, 3, 4, 5, 6, 7, 8, 9]
+    // 手写forEach
+    Array.prototype._forEach = function (fn) {
+      for (let i = 0; i < this.length; i++) {
+        fn(this[i], i)
+
+      }
+    }
+
+    // arr._forEach((el, i) => {
+    //   console.log(el, i)
+    // })
+
+    // 手写reduce
+    Array.prototype._reduce = function (fn, defaultValue) {
+      if (!this.length) return defaultValue
+      let result = defaultValue
+      for (let i = 0; i < this.length; i++) {
+        if (result == null && i === 0) {
+          result = this[i]
+          continue
+        }
+        result = fn(result, this[i], this)
+      }
+      return result
+    }
+
+    // console.log(arr._reduce((a, b) => a + b), 0)
+
+    // 手写some
+    Array.prototype._some = function (fn) {
+      let result = false
+      for (let i = 0; i < this.length; i++) {
+        if (fn(this[i])) {
+          result = true
+          break
+        }
+      }
+      return result
+    }
+
+    // console.log(arr._some(el => el > 10))
+
+    // 手写every
+    Array.prototype._every = function (fn) {
+      let step = 0
+      for (let i = 0; i < this.length; i++) {
+        if (fn(this[i])) {
+          step++
+        }
+      }
+      return step === this.length
+    }
+
+    // console.log(arr._every(el => el >= 1))
+
+    // 手写findIndex
+    Array.prototype._findIndex = function (fn) {
+      let index = -1
+      for (let i = 0; i < this.length; i++) {
+        if (fn(this[i], i)) {
+          index = i
+          break
+        }
+      }
+      return index
+    }
+    // console.log(arr._findIndex(el => el === 5))
+
+    // 手写find
+    Array.prototype._find = function (fn) {
+      for (let i = 0; i < this.length; i++) {
+        if (fn(this[i], i)) {
+          return this[i]
+        }
+      }
+      return undefined
+    }
+
+    // console.log(arr._find(el => el > 5))
+
+
+    // 手写fill
+    Array.prototype._fill = function (target, start, end) {
+      end = end || this.length
+      for (let i = start; i < end; i++) {
+        this[i] = target
+      }
+      return this
+    }
+    // console.log(arr.fill(10, 7), arr._fill(10, 7))
+
+    // 手写flat
+    Array.prototype._flat = function (deep) {
+      let step = 1
+      let arr = this
+      // 不适用于数组对象
+      // if (deep === Infinity) {
+      //   return this.toString().split(',').map(el => el)
+      // }
+
+      while (arr.some(el => Array.isArray(el))) {
+        arr = [].concat.apply([], arr)
+        step++
+        if (step > deep) break
+      }
+      return arr
+    }
+
+    // console.log([1, [2, [3]]]._flat(2))
+
+    // 手写 includes
+    Array.prototype._includes = function (target, fromIndex) {
+      if (fromIndex > this.length) return false
+      if (fromIndex < -this.length || fromIndex == null) fromIndex = 0
+      if (fromIndex < 0) fromIndex = this.length + fromIndex
+
+      for (let i = fromIndex; i < this.length; i++) {
+        let isNan = Number.isNaN(this[i])
+        if (this[i] === target || isNan && isNaN(target)) {
+          return true
+        }
+      }
+      return false
+    }
+
+    // console.log(arr._includes(8))
+
+    // 手写map
+    Array.prototype._map = function (fn) {
+      let result = []
+      for (let i = 0; i < this.length; i++) {
+        result.push(fn(this[i], i))
+      }
+      return result
+    }
+
+    // 手写splice， splice(start, deleteCount, item1, item2, itemN)
+    Array.prototype._splice = function (start = 0, deleteCount) {
+
+      const args = [].slice.call(arguments, 2)
+      if (start >= this.length) {
+        this = this.concat(args)
+      }
+      if (start < -this.length) start = 0
+
+      if (start < 0) {
+        start = this.length + start
+      }
+
+
+
+    }
+
+    console.log([]._splice(1, 1,))
+
+  </script>
+</body>
+
+</html>
